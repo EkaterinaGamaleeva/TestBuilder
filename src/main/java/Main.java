@@ -11,6 +11,8 @@ public class Main {
         stringBuilder.toString();
         stringBuilder.reverse();
         stringBuilder.toString();
+        stringBuilder.undo();
+
 
     }
 

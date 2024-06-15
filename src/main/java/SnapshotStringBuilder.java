@@ -126,8 +126,7 @@ public class SnapshotStringBuilder implements MementoStringBuilder,Comparable<Sn
 
     @Override
     public void undo() {
-       String str="new mothod";
-        append(str);
+        System.out.println(chars[count]);;
     }
     public char[] reverse(){
        char [] char2= new char[chars.length] ;
