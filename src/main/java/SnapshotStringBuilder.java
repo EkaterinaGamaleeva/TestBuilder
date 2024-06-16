@@ -7,7 +7,7 @@ public class SnapshotStringBuilder implements MementoStringBuilder,Comparable<Sn
     private int count;
     private int index=0;
     private int countCharsInString;
-    private boolean check;
+
     private ArrayList<Integer>massiveCheck ;
 
     {
@@ -48,7 +48,6 @@ public class SnapshotStringBuilder implements MementoStringBuilder,Comparable<Sn
              chars[count]=ch;
              count++;
         createMassiveCheck(1);
-        check=false;
     }
         private char [] newChars(){
             char[] newChars = new char[chars.length+16];
@@ -137,7 +136,8 @@ public class SnapshotStringBuilder implements MementoStringBuilder,Comparable<Sn
         }
 
         createMassiveCheck(countCharsInString);
-                check=true;
+        countCharsInString=0;
+
         }
 
     public char[] getChars() {
@@ -148,20 +148,29 @@ public class SnapshotStringBuilder implements MementoStringBuilder,Comparable<Sn
         return count;
     }
 
-    public boolean isCheck() {
-        return check;
-    }
 
     @Override
     public void undo() {
-        if (check==false) {
-        deleteCharAt(count - 1);
-    }
-      else  if(check==true){
-    Optional<Integer> quantityCharInString=massiveCheck.stream().filter(e->e>1).findFirst();
-    int start=count-quantityCharInString.get();
-   delete(start,count);
-    }
+        for (int i = getMassiveCheck().size()-1; i>=0; i--) {
+            if(getMassiveCheck().get(i)==0){
+                getMassiveCheck().remove(i);
+                continue;
+            }
+            if (getMassiveCheck().get(i)>1){
+                 int quantityCharInString=getMassiveCheck().get(i);
+                 int start=count-quantityCharInString;
+                 delete(start,count);
+                 count=count-quantityCharInString;
+                 getMassiveCheck().remove(i);
+                break;
+            }
+            if (getMassiveCheck().get(i)==1){
+                deleteCharAt(count-1);
+                count=count-1;
+                getMassiveCheck().remove(i);
+                break;
+            }
+        }
 }
 
     public char[] reverse(){
