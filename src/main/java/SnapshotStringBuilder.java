@@ -1,9 +1,18 @@
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Optional;
 
 public class SnapshotStringBuilder implements MementoStringBuilder,Comparable<SnapshotStringBuilder> {
     private char[] chars;
     private int count;
+    private int index=0;
+    private int countCharsInString;
+    private boolean check;
+    private ArrayList<Integer>massiveCheck ;
 
+    {
+        massiveCheck=new ArrayList<>();
+    }
     public String toString() {
          Arrays.asList(chars).stream().forEach(System.out::println);
         return null;
@@ -15,10 +24,16 @@ public class SnapshotStringBuilder implements MementoStringBuilder,Comparable<Sn
 
     public SnapshotStringBuilder(String str) {
         append(str);
+        for (int i = 0; i < str.length(); i++) {
+            countCharsInString++;
+            createMassiveCheck(countCharsInString);
+        }
+        ;
     }
 
     public SnapshotStringBuilder(char ch) {
         append(ch);
+        createMassiveCheck(1);
     }
 
     public void append(Object o) {
@@ -32,7 +47,9 @@ public class SnapshotStringBuilder implements MementoStringBuilder,Comparable<Sn
         }
              chars[count]=ch;
              count++;
-        }
+        createMassiveCheck(1);
+        check=false;
+    }
         private char [] newChars(){
             char[] newChars = new char[chars.length+16];
             for (int i = 0; i < chars.length; i++) {
@@ -78,6 +95,11 @@ public class SnapshotStringBuilder implements MementoStringBuilder,Comparable<Sn
             chars[index]=ch;
         }
     }
+
+    public ArrayList<Integer> getMassiveCheck() {
+        return massiveCheck;
+    }
+
     public int length(){
         return getChars().length;
     }
@@ -92,9 +114,7 @@ public class SnapshotStringBuilder implements MementoStringBuilder,Comparable<Sn
 
     }
     public void deleteCharAt(int index){
-        if (index!=0){
             chars[index]=0;
-        }
     }
     public void append(String str) {
         if (str.length() + count > chars.length) {
@@ -105,15 +125,19 @@ public class SnapshotStringBuilder implements MementoStringBuilder,Comparable<Sn
             for (int i = 0; i <str.length(); i++) {
                 chars[i]=str.charAt(i);
                     count++;
+                countCharsInString++;
                 }
             }
         else {
                     for (int i = 0; i <str.length(); i++) {
                         chars[count] = str.charAt(i);
                         count++;
+                        countCharsInString++;
                     }
         }
 
+        createMassiveCheck(countCharsInString);
+                check=true;
         }
 
     public char[] getChars() {
@@ -124,10 +148,22 @@ public class SnapshotStringBuilder implements MementoStringBuilder,Comparable<Sn
         return count;
     }
 
+    public boolean isCheck() {
+        return check;
+    }
+
     @Override
     public void undo() {
-        System.out.println(chars[count]);;
+        if (check==false) {
+        deleteCharAt(count - 1);
     }
+      else  if(check==true){
+    Optional<Integer> quantityCharInString=massiveCheck.stream().filter(e->e>1).findFirst();
+    int start=count-quantityCharInString.get();
+   delete(start,count);
+    }
+}
+
     public char[] reverse(){
        char [] char2= new char[chars.length] ;
         int count=0;
@@ -140,7 +176,11 @@ public class SnapshotStringBuilder implements MementoStringBuilder,Comparable<Sn
         return chars=char2;
     }
 
-
+public ArrayList<Integer> createMassiveCheck(int count){
+         massiveCheck.add(index,count);
+         index++;
+        return massiveCheck;
+}
 
 
     public int lastIndexOf(String str, int index){
