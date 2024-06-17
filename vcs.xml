@@ -14,9 +14,13 @@
           <option name="url" value="https://github.com/EkaterinaGamaleeva/TestBuilder.git" />
           <option name="userName" value="" />
         </UrlAndUserName>
+        <UrlAndUserName>
+          <option name="url" value="https://github.com/EkaterinaGamaleeva/TextEditor.git" />
+          <option name="userName" value="" />
+        </UrlAndUserName>
       </list>
     </option>
-    <option name="cloneParentDir" value="C:\Users\gamal\IdeaProjects\TestBuilder" />
+    <option name="cloneParentDir" value="C:\Users\gamal\IdeaProjects" />
   </component>
   <component name="Vcs.Log.App.Settings">
     <option name="COLUMN_ID_ORDER">
